@@ -1,0 +1,167 @@
+{
+  "info": {
+    "name": "Smart Support Desk",
+    "description": "API collection for the Smart Support Desk master + sub-agent system.\n\n**Setup:**\n1. Start server: `uvicorn main:app --reload`\n2. Set `base_url` variable (default: http://127.0.0.1:8000)\n3. Upload sample PDFs from `data/sample_pdfs/` using **Upload PDF**\n4. Submit support requests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "doc_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "System",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Knowledge Base",
+      "item": [
+        {
+          "name": "Upload PDF",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "data/sample_pdfs/02-api-rate-limits.pdf",
+                  "description": "Select any PDF from data/sample_pdfs/"
+                }
+              ]
+            },
+            "url": "{{base_url}}/docs/upload",
+            "description": "Upload a product documentation PDF. Run scripts/generate_sample_pdfs.py first to create sample files."
+          }
+        },
+        {
+          "name": "List Uploaded PDFs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/docs/list"
+          }
+        },
+        {
+          "name": "Delete PDF",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{base_url}}/docs/{{doc_id}}",
+            "description": "Set doc_id variable from List Uploaded PDFs response."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Support Tickets",
+      "item": [
+        {
+          "name": "Product Question — API Rate Limits",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_email\": \"bob@example.com\",\n  \"subject\": \"API rate limits\",\n  \"message\": \"What's the API rate limit on the Pro plan?\"\n}"
+            },
+            "url": "{{base_url}}/support",
+            "description": "Requires uploading 02-api-rate-limits.pdf first."
+          }
+        },
+        {
+          "name": "Product Question — Reset API Key",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_email\": \"bob@example.com\",\n  \"subject\": \"API key help\",\n  \"message\": \"How do I reset my API key?\"\n}"
+            },
+            "url": "{{base_url}}/support",
+            "description": "Requires uploading 03-api-keys.pdf first."
+          }
+        },
+        {
+          "name": "Billing Issue — Duplicate Charge",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_email\": \"alice@example.com\",\n  \"subject\": \"Double charged\",\n  \"message\": \"I was charged twice for June.\"\n}"
+            },
+            "url": "{{base_url}}/support"
+          }
+        },
+        {
+          "name": "Bug Report — Dashboard Crash",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_email\": \"bob@example.com\",\n  \"subject\": \"Dashboard crash\",\n  \"message\": \"The dashboard goes blank after I upload a CSV file.\"\n}"
+            },
+            "url": "{{base_url}}/support"
+          }
+        },
+        {
+          "name": "Product Question — Webhooks",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_email\": \"bob@example.com\",\n  \"subject\": \"Webhook retries\",\n  \"message\": \"How does webhook retry work if my endpoint is down?\"\n}"
+            },
+            "url": "{{base_url}}/support",
+            "description": "Requires uploading 07-webhooks-and-integrations.pdf first."
+          }
+        }
+      ]
+    }
+  ]
+}
